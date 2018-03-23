@@ -1,10 +1,10 @@
 //
 //  CommonAlertTextView.m
 
-//
 //  Created by  on 2018/1/30.
 //  Copyright © 2018年 . All rights reserved.
 //
+
 #import "CommonAlertTextView.h"
 
 @interface CommonAlertTextView()
@@ -258,6 +258,53 @@
     label.attributedText = attributedString;
 }
 
+/**
+ *  获取颜色 含有alpha
+ *
+ *  @param color 6位16进制字符串
+ *  @param alpha 透明度
+ *
+ *  @return 颜色
+ */
+- (UIColor *)colorWithHexString:(NSString *)color alpha:(CGFloat)alpha {
+    NSString *cString = [[color stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+    if ([cString length] < 6) {
+        return [UIColor clearColor];
+    }
+    if ([cString hasPrefix:@"0X"]) {
+        cString = [cString substringFromIndex:2];
+    }
+    if ([cString hasPrefix:@"#"]) {
+        cString = [cString substringFromIndex:1];
+    }
+    if ([cString length] != 6) {
+        return [UIColor clearColor];
+    }
+    NSRange range;
+    range.location = 0;
+    range.length = 2;
+    NSString *rString = [cString substringWithRange:range];
+    range.location = 2;
+    NSString *gString = [cString substringWithRange:range];
+    range.location = 4;
+    NSString *bString = [cString substringWithRange:range];
+    unsigned int r, g, b;
+    [[NSScanner scannerWithString:rString] scanHexInt:&r];
+    [[NSScanner scannerWithString:gString] scanHexInt:&g];
+    [[NSScanner scannerWithString:bString] scanHexInt:&b];
+    return [UIColor colorWithRed:((float)r / 255.0f) green:((float)g / 255.0f) blue:((float)b / 255.0f) alpha:alpha];
+}
+/**
+ *  获取颜色
+ *
+ *  @param color 6位16进制字符串
+ *
+ *  @return 颜色
+ */
+- (UIColor *)colorWithHexString:(NSString *)color {
+    return [self colorWithHexString:color alpha:1];
+}
+
 #pragma mark - getter and setter
 
 -(UITapGestureRecognizer *)viewTap{
@@ -278,7 +325,7 @@
 -(UIView *)backView{
     if (!_backView) {
         _backView = [[UIView alloc]init];
-        _backView.backgroundColor = [UIColor colorWithHexString:COLOR_GRAYLIGHT];
+        _backView.backgroundColor = [self colorWithHexString:@"#f2f2f2"];
         _backView.userInteractionEnabled = YES;
         _backView.layer.masksToBounds = YES;
         _backView.layer.cornerRadius = 5;
@@ -298,11 +345,12 @@
 }
 
 
+
 //横线
 -(UIView *)hengXian{
     if (!_hengXian) {
         _hengXian = [[UIView alloc]init];
-        _hengXian.backgroundColor = [UIColor colorWithHexString:COLORLINE];
+        _hengXian.backgroundColor = [self colorWithHexString:@"#e8e8e8"];
     }
     return _hengXian;
 }
@@ -311,7 +359,7 @@
 -(UIView *)shuxian{
     if (!_shuxian) {
         _shuxian = [[UIView alloc]init];
-        _shuxian.backgroundColor = [UIColor colorWithHexString:COLORLINE];
+        _shuxian.backgroundColor = [self colorWithHexString:@"#e8e8e8"];
     }
     return _shuxian;
 }
@@ -322,7 +370,7 @@
         _agreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_agreeButton setTitle:@"确定" forState:UIControlStateNormal];
         [_agreeButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
-        [_agreeButton setTitleColor:[UIColor colorWithHexString:COLORBLUEBOARD] forState:UIControlStateNormal];
+        [_agreeButton setTitleColor:[self colorWithHexString:@"007edd"] forState:UIControlStateNormal];
         [_agreeButton addTarget:self action:@selector(agreeButtonClick) forControlEvents:UIControlEventTouchUpInside];
         
     }
@@ -335,7 +383,7 @@
         _dissAgreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_dissAgreeButton setTitle:@"取消" forState:UIControlStateNormal];
         [_dissAgreeButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
-        [_dissAgreeButton setTitleColor:[UIColor colorWithHexString:COLORTEXT] forState:UIControlStateNormal];
+        [_dissAgreeButton setTitleColor:[self colorWithHexString:@"#535364"] forState:UIControlStateNormal];
         [_dissAgreeButton addTarget:self action:@selector(dissAgreeButtonClick)forControlEvents:UIControlEventTouchUpInside];
     }
     return _dissAgreeButton;
@@ -348,7 +396,7 @@
         _backViewOne.backgroundColor = [UIColor whiteColor];
         _backViewOne.layer.masksToBounds = YES;
         _backViewOne.layer.cornerRadius = 5.0;
-        _backViewOne.layer.borderColor = [UIColor colorWithHexString:@"e6e6e6"].CGColor;
+        _backViewOne.layer.borderColor = [self colorWithHexString:@"e6e6e6"].CGColor;
         _backViewOne.layer.borderWidth = 1;
     }
     return _backViewOne;
@@ -360,7 +408,7 @@
         _backViewTwo.backgroundColor = [UIColor whiteColor];
         _backViewTwo.layer.masksToBounds = YES;
         _backViewTwo.layer.cornerRadius = 5.0;
-        _backViewTwo.layer.borderColor = [UIColor colorWithHexString:@"e6e6e6"].CGColor;
+        _backViewTwo.layer.borderColor = [self colorWithHexString:@"e6e6e6"].CGColor;
         _backViewTwo.layer.borderWidth = 1;
     }
     return _backViewTwo;
@@ -370,7 +418,7 @@
     if (!_placeHoldLabelOne) {
         _placeHoldLabelOne = [[UILabel alloc]init];
         //        _placeHoldLabelOne.backgroundColor = [UIColor yellowColor];
-        _placeHoldLabelOne.textColor =[UIColor colorWithHexString:COLORTEXT];
+        _placeHoldLabelOne.textColor =[self colorWithHexString:@"#535364"];
         _placeHoldLabelOne.font = [UIFont systemFontOfSize:13];
         _placeHoldLabelOne.textAlignment = NSTextAlignmentCenter;
     }
@@ -381,7 +429,7 @@
     if (!_placeHoldLabelTwo) {
         _placeHoldLabelTwo = [[UILabel alloc]init];
         //        _placeHoldLabelTwo.backgroundColor = [UIColor yellowColor];
-        _placeHoldLabelTwo.textColor =[UIColor colorWithHexString:COLORTEXT];
+        _placeHoldLabelTwo.textColor =[self colorWithHexString:@"#535364"];
         _placeHoldLabelTwo.font = [UIFont systemFontOfSize:13];
         _placeHoldLabelTwo.textAlignment = NSTextAlignmentCenter;
     }
@@ -393,7 +441,7 @@
     if (!_textFieldOne) {
         _textFieldOne =[[UITextField alloc]init];
         _textFieldOne.font = [UIFont systemFontOfSize:14];
-        _textFieldOne.textColor = [UIColor colorWithHexString:COLORTEXT];
+        _textFieldOne.textColor = [self colorWithHexString:@"#535364"];
         _textFieldOne.clearButtonMode = YES;
         //        _textFieldOne.backgroundColor = [UIColor blueColor];
     }
@@ -405,7 +453,7 @@
     if (!_textFieldTwo) {
         _textFieldTwo =[[UITextField alloc]init];
         _textFieldTwo.font = [UIFont systemFontOfSize:14];
-        _textFieldTwo.textColor = [UIColor colorWithHexString:COLORTEXT];
+        _textFieldTwo.textColor = [self colorWithHexString:@"#535364"];
         _textFieldTwo.clearButtonMode = YES;
         //        _textFieldTwo.backgroundColor = [UIColor blueColor];
     }
@@ -421,4 +469,3 @@
  */
 
 @end
-
