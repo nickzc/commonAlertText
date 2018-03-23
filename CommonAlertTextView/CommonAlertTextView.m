@@ -1,14 +1,11 @@
 //
 //  CommonAlertTextView.m
+
 //
 //  Created by  on 2018/1/30.
-//  Copyright © 2018年. All rights reserved.
+//  Copyright © 2018年 . All rights reserved.
 //
-
 #import "CommonAlertTextView.h"
-#import "UILabel+LineSpace.h"
-//需要引入Masonry框架
-#import "Masonry.h"
 
 @interface CommonAlertTextView()
 //点击手势
@@ -18,6 +15,8 @@
 @property(nonatomic,strong)UIView *backView;
 //title
 @property(nonatomic,strong)UILabel *titleLabel;
+//textView
+//@property(nonatomic,strong)UILabel *messageLabel;
 //横线
 @property(nonatomic,strong)UIView *hengXian;
 //竖线
@@ -65,7 +64,7 @@
         [self.backView addSubview:self.shuxian];
         [self.backView addSubview:self.agreeButton];
         [self.backView addSubview:self.dissAgreeButton];
-        [self.titleLabel setText:title lineSpacing:7];
+        [self setLabel:self.titleLabel withText:title lineSpacing:7];
         [self.placeHoldLabelOne setText:lineTitleOne];
         [self.placeHoldLabelTwo setText:lineTitleTwo];
         self.textFieldOne.placeholder = placeHoldOne;
@@ -93,7 +92,7 @@
         [self.backView addSubview:self.shuxian];
         [self.backView addSubview:self.agreeButton];
         [self.backView addSubview:self.dissAgreeButton];
-        [self.titleLabel setText:title lineSpacing:7];
+        [self setLabel:self.titleLabel withText:title lineSpacing:7];
         [self.placeHoldLabelOne setText:lineTitleOne];
         [self.placeHoldLabelTwo setText:lineTitleTwo];
         self.textFieldOne.text = lineOne;
@@ -159,7 +158,7 @@
         make.right.equalTo(self.backViewOne.mas_right).with.offset(-5);
         make.height.mas_offset(25);
     }];
-
+    
     [self.backViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         make.top.equalTo(self.backViewOne.mas_bottom).with.offset(10);
@@ -237,6 +236,28 @@
         [_delegate agreeClickWithLineOne:self.textFieldOne.text andLineTwo:self.textFieldTwo.text];
     }
 }
+
+/**
+ 设置文本,并指定行间距
+ @param label 要改的label
+ @param text 文本内容
+ @param lineSpacing 行间距
+ */
+-(void)setLabel:(UILabel *)label withText:(NSString*)text lineSpacing:(CGFloat)lineSpacing{
+    if (!text || lineSpacing < 0.01) {
+        label.text = text;
+        return;
+    }
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:lineSpacing];        //设置行间距
+    [paragraphStyle setLineBreakMode:label.lineBreakMode];
+    [paragraphStyle setAlignment:label.textAlignment];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [text length])];
+    label.attributedText = attributedString;
+}
+
 #pragma mark - getter and setter
 
 -(UITapGestureRecognizer *)viewTap{
@@ -275,6 +296,7 @@
     }
     return _titleLabel;
 }
+
 
 //横线
 -(UIView *)hengXian{
@@ -347,7 +369,7 @@
 -(UILabel *)placeHoldLabelOne{
     if (!_placeHoldLabelOne) {
         _placeHoldLabelOne = [[UILabel alloc]init];
-//        _placeHoldLabelOne.backgroundColor = [UIColor yellowColor];
+        //        _placeHoldLabelOne.backgroundColor = [UIColor yellowColor];
         _placeHoldLabelOne.textColor =[UIColor colorWithHexString:COLORTEXT];
         _placeHoldLabelOne.font = [UIFont systemFontOfSize:13];
         _placeHoldLabelOne.textAlignment = NSTextAlignmentCenter;
@@ -358,7 +380,7 @@
 -(UILabel *)placeHoldLabelTwo{
     if (!_placeHoldLabelTwo) {
         _placeHoldLabelTwo = [[UILabel alloc]init];
-//        _placeHoldLabelTwo.backgroundColor = [UIColor yellowColor];
+        //        _placeHoldLabelTwo.backgroundColor = [UIColor yellowColor];
         _placeHoldLabelTwo.textColor =[UIColor colorWithHexString:COLORTEXT];
         _placeHoldLabelTwo.font = [UIFont systemFontOfSize:13];
         _placeHoldLabelTwo.textAlignment = NSTextAlignmentCenter;
@@ -373,7 +395,7 @@
         _textFieldOne.font = [UIFont systemFontOfSize:14];
         _textFieldOne.textColor = [UIColor colorWithHexString:COLORTEXT];
         _textFieldOne.clearButtonMode = YES;
-//        _textFieldOne.backgroundColor = [UIColor blueColor];
+        //        _textFieldOne.backgroundColor = [UIColor blueColor];
     }
     return _textFieldOne;
 }
@@ -385,7 +407,7 @@
         _textFieldTwo.font = [UIFont systemFontOfSize:14];
         _textFieldTwo.textColor = [UIColor colorWithHexString:COLORTEXT];
         _textFieldTwo.clearButtonMode = YES;
-//        _textFieldTwo.backgroundColor = [UIColor blueColor];
+        //        _textFieldTwo.backgroundColor = [UIColor blueColor];
     }
     return _textFieldTwo;
 }
@@ -399,3 +421,4 @@
  */
 
 @end
+
